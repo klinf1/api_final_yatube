@@ -5,6 +5,10 @@ from django.core.files.base import ContentFile
 
 
 class Base64ImageField(serializers.ImageField):
+    """A custom serializer field,
+    used to encode and decode an image file as a string using base64 coding.
+    """
+
     def to_internal_value(self, data):
         if isinstance(data, str) and data.startswith('data:image'):
             format, imgstr = data.split(';base64,')

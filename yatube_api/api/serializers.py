@@ -10,6 +10,11 @@ User = get_user_model()
 
 
 class PostSerializer(serializers.ModelSerializer):
+    """
+    Serializer class for Post objects.
+    Uses Base64ImageField custom field for image serializing.
+    """
+
     author = SlugRelatedField(slug_field='username', read_only=True)
     image = Base64ImageField(required=False, allow_null=True)
 
@@ -19,6 +24,10 @@ class PostSerializer(serializers.ModelSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
+    """
+    Serializer class for Comment objects.
+    """
+
     author = serializers.SlugRelatedField(
         read_only=True, slug_field='username'
     )
@@ -29,6 +38,9 @@ class CommentSerializer(serializers.ModelSerializer):
 
 
 class GroupSerializer(serializers.ModelSerializer):
+    """
+    Serializer class for Comment objects.
+    """
 
     class Meta:
         model = Group
@@ -36,6 +48,13 @@ class GroupSerializer(serializers.ModelSerializer):
 
 
 class FollowSerializer(serializers.ModelSerializer):
+    """
+    Serializer class for Follow objects.
+    Uses UniqueTogetherValidator to disallow
+    creating a copy of already existing Follow.
+    Following field is also validated to disallow following oneself.
+    """
+
     user = serializers.SlugRelatedField(
         read_only=True,
         slug_field='username',

@@ -19,6 +19,12 @@ User = get_user_model()
 
 
 class PostViewSet(viewsets.ModelViewSet):
+    """
+    Viewset for requests to api/v1/posts endpoints.
+    Allows editing only to post authors.
+    Supports limit-offset pagination.
+    """
+
     permission_classes = [IsAuthorOrReadOnly]
     queryset = Post.objects.all()
     serializer_class = PostSerializer
@@ -29,11 +35,20 @@ class PostViewSet(viewsets.ModelViewSet):
 
 
 class GroupViewSet(viewsets.ReadOnlyModelViewSet):
+    """Viewset for requests to api/v1/groups endpoints.
+    Only allows for GET-requests.
+    """
+
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
 
 
 class CommentViewSet(viewsets.ModelViewSet):
+    """
+    Viewset for requests to api/v1/{post_id}/comments endpoints.
+    Allows editing only to comment authors.
+    """
+
     permission_classes = [IsAuthorOrReadOnly]
     serializer_class = CommentSerializer
 
@@ -49,6 +64,11 @@ class CommentViewSet(viewsets.ModelViewSet):
 
 
 class FollowViewSet(ListCreateViewSet):
+    """
+    Viewset for requests to api/v1/follow endpoints.
+    Supports search by username of followed users.
+    """
+
     permission_classes = [IsAuthenticated]
     serializer_class = FollowSerializer
     filter_backends = (DjangoFilterBackend, filters.SearchFilter)
